@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::647461972312:role/Customer-ArcX-S3BucketRole
+  name: arcx-bucket-access-sa
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: arcx-data-pipeline-export
+spec:
+  template:
+    spec:
+      containers:
+      - name: data-pipeline-job-$CI_COMMIT_SHORT_SHA
+        image: $CI_REGISTRY_IMAGE/datapipeline:$CI_COMMIT_SHORT_SHA
+        command: ["/bin/sh","-c"]
+        args: ["echo '$DB_HOST:$DB_PORT:$DB_NAME:$DB_USERNAME:$DB_PASSWORD' > ~/.pgpass && chmod 600 ~/.pgpass && pg_dump -h $DB_HOST -U $DB_USERNAME $DB_NAME -n $DB_SCHEMA -Fc -f arcx-data.dump && aws s3 cp ./arcx-data.dump s3://arcx-db-backup"]
+      restartPolicy: Never
+      serviceAccountName: arcx-bucket-access-sa
+      imagePullSecrets:
+      - name: glcr-auth
+  backoffLimit: 1

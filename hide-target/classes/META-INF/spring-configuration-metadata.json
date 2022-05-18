@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "com.app.arcx.config.ApplicationProperties",
+      "sourceType": "com.app.arcx.config.ApplicationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "application.doc-host-http-protocol",
+      "type": "java.lang.String",
+      "sourceType": "com.app.arcx.config.ApplicationProperties"
+    },
+    {
+      "name": "application.doc-host-port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.app.arcx.config.ApplicationProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "application.doc-host-replacement",
+      "type": "java.lang.String",
+      "sourceType": "com.app.arcx.config.ApplicationProperties"
+    }
+  ],
+  "hints": []
+}

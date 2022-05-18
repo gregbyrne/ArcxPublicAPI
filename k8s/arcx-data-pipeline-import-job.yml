@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: arcx-data-pipeline-import
+spec:
+  template:
+    spec:
+      containers:
+      - name: data-pipeline-job-$CI_COMMIT_SHORT_SHA
+        image: $CI_REGISTRY_IMAGE/datapipeline:$CI_COMMIT_SHORT_SHA
+        command: ["/bin/sh","-c"]
+        args: ["aws s3 cp s3://arcx-db-backup/arcx-data.dump ./arcx-data.dump && cat ./arcx-data.dump && echo '$DB_HOST:$DB_PORT:$DB_NAME:$DB_USERNAME:$DB_PASSWORD' > ~/.pgpass && chmod 600 ~/.pgpass && pg_restore --clean -h $DB_HOST -U $DB_USERNAME -n $DB_SCHEMA -d $DB_NAME arcx-data.dump"]
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: glcr-auth
+  backoffLimit: 1

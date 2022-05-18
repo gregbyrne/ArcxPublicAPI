@@ -1,0 +1,757 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
+
+-- Started on 2021-07-01 10:02:42
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 6 (class 2615 OID 16395)
+-- Name: data; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA data;
+
+
+ALTER SCHEMA data OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 201 (class 1259 OID 24704)
+-- Name: additional_information; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.additional_information (
+    id integer NOT NULL,
+    description character varying,
+    regioncode character varying
+);
+
+
+ALTER TABLE data.additional_information OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 24710)
+-- Name: additional_information_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.additional_information ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.additional_information_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 203 (class 1259 OID 24712)
+-- Name: area_of_interest; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.area_of_interest (
+    id integer NOT NULL,
+    name character varying(200) NOT NULL,
+    "position" integer
+);
+
+
+ALTER TABLE data.area_of_interest OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 24715)
+-- Name: area_of_interest_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.area_of_interest ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.area_of_interest_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 205 (class 1259 OID 24717)
+-- Name: area_of_interest_items; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.area_of_interest_items (
+    id integer NOT NULL,
+    parentid integer NOT NULL,
+    name character varying NOT NULL,
+    value character varying,
+    "position" integer
+);
+
+
+ALTER TABLE data.area_of_interest_items OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 24723)
+-- Name: area_of_interest_items_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.area_of_interest_items ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.area_of_interest_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 207 (class 1259 OID 24725)
+-- Name: area_of_interest_sub_items; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.area_of_interest_sub_items (
+    id integer NOT NULL,
+    parentid integer NOT NULL,
+    name character varying NOT NULL,
+    value character varying,
+    "position" integer
+);
+
+
+ALTER TABLE data.area_of_interest_sub_items OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 24731)
+-- Name: area_of_interest_sub_items_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.area_of_interest_sub_items ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.area_of_interest_sub_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 209 (class 1259 OID 24733)
+-- Name: authority; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.authority (
+    id integer NOT NULL,
+    name character varying
+);
+
+
+ALTER TABLE data.authority OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 24739)
+-- Name: regions; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.regions (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    code character varying
+);
+
+
+ALTER TABLE data.regions OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 24745)
+-- Name: regions_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.regions ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.regions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 212 (class 1259 OID 24747)
+-- Name: steps_to_help_prepare; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.steps_to_help_prepare (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    sub_title character varying,
+    description character varying,
+    "position" integer
+);
+
+
+ALTER TABLE data.steps_to_help_prepare OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 24753)
+-- Name: steps_to_help_prepare_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.steps_to_help_prepare ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.steps_to_help_prepare_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 214 (class 1259 OID 24755)
+-- Name: steps_to_help_prepare_items; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.steps_to_help_prepare_items (
+    id integer NOT NULL,
+    parentid integer NOT NULL,
+    name character varying NOT NULL,
+    content character varying,
+    aoi_items_id integer,
+    aoi_sub_items_id integer,
+    aoi_id integer,
+    sub_title character varying
+);
+
+
+ALTER TABLE data.steps_to_help_prepare_items OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 24761)
+-- Name: steps_to_help_prepare_items_id_seq; Type: SEQUENCE; Schema: data; Owner: postgres
+--
+
+ALTER TABLE data.steps_to_help_prepare_items ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME data.steps_to_help_prepare_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 216 (class 1259 OID 24763)
+-- Name: steps_to_help_prepare_sub_items; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.steps_to_help_prepare_sub_items (
+    id integer NOT NULL,
+    parentid integer NOT NULL,
+    content character varying NOT NULL,
+    aoi_items_id integer,
+    aoi_sub_items_id integer
+);
+
+
+ALTER TABLE data.steps_to_help_prepare_sub_items OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 24769)
+-- Name: user; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data."user" (
+    id integer NOT NULL,
+    email character varying(250) NOT NULL,
+    enabled boolean NOT NULL,
+    password character varying(250) NOT NULL,
+    username character varying(250) NOT NULL
+);
+
+
+ALTER TABLE data."user" OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 24775)
+-- Name: user_authority; Type: TABLE; Schema: data; Owner: postgres
+--
+
+CREATE TABLE data.user_authority (
+    user_id integer NOT NULL,
+    authority_id integer NOT NULL
+);
+
+
+ALTER TABLE data.user_authority OWNER TO postgres;
+
+--
+-- TOC entry 3067 (class 0 OID 24704)
+-- Dependencies: 201
+-- Data for Name: additional_information; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.additional_information (id, description, regioncode) FROM stdin;
+1	<p class="indented" id="region_summary"><p>The Northeast is projected to experience increased precipitation, more frequent and intense storms, and higher average temperatures. These projected changes pose challenges to communities as they protect water and waste infrastructure, maintain water quality, and protect air quality and public health. Many communities are building resilience to the risks they face under current climatic conditions.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/northeast" target="_blank">Climate Impacts on the Northeast</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Northeast are Adapting</a></li>\n\t\t\t\t</ul></p>	NE
+3	<p class="indented" id="region_summary"><p>The southeast region is projected to experience higher average temperatures, increased precipitation, and more frequent and intense storms. These projected changes pose challenges to communities as they diversify water source, protect sensitive wetlands and protect people from heat waves. Climate impacts vary from a wet northern area to a dry southwest area.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/southeast-caribbean" target="_blank">Climate Impacts on the Southeast</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Southeast are Adapting</a></li>\n\t\t\t\t</ul></p>	SE
+4	<p class="indented" id="region_summary"><p>The Hawai'i and Pacific Islands are projected to experience warmer oceans leading to increased coral bleaching and disease outbreaks and changing distribution of tuna fisheries. Freshwater supplies will become more limited on many islands. Coastal flooding and erosion will increase. Mounting threats to food and water security, infrastructure, health, and safety are expected to lead to increasing human migration.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/hawai%CA%BBi-pacific-islands" target="_blank">Climate Impacts on Hawai'i and Pacific Islands</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in Hawai'i and Pacific Islands are Adapting</a></li>\n\t\t\t\t</ul></p>	HI
+5	<p class="indented" id="region_summary"><p>The Great Plains is projected to experience rising temperatures leading to increased demand for water and energy. In parts of the region, this will constrain development, stress natural resources, and increase competition for water. New agricultural practices will be needed to cope with changing conditions.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/great-plains" target="_blank">Climate Impacts on the Great Plains</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Great Plains are Adapting</a></li>\n\t\t\t\t</ul></p>	GP
+6	<p class="indented" id="region_summary"><p>The Northwest is projected to experience changes in the timing of streamflow that will reduce water supplies for competing demands. Sea level rise, erosion, inundation, risks to infrastructure, and increasing ocean acidity pose major threats. Increasing wildfire, insect outbreaks, and tree diseases are causing widespread tree die-off.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/northwest" target="_blank">Climate Impacts on the Northwest</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Northwest are Adapting</a></li>\n\t\t\t\t</ul></p>	NW
+7	<p class="indented" id="region_summary"><p>The Southwest is projected to experience increased heat, drought, insect outbreaks, and wildfires. Declining water supplies, reduced agricultural yields, health impacts in cities due to heat, and flooding and erosion in coastal areas are additional concerns.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/southwest" target="_blank">Climate Impacts on the Southwest</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Southwest are Adapting</a></li>\n\t\t\t\t</ul></p>	SW
+8	<p class="indented" id="region_summary"><p>Alaska has warmed twice as fast as the rest of the nation, bringing widespread impacts. Sea ice is rapidly receding and glaciers are shrinking. Thawing permafrost is leading to more wildfire, and affecting infrastructure and wildlife habitat. Rising ocean temperatures and acidification will alter valuable marine fisheries.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/alaska" target="_blank">Climate Impacts on Alaska</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in Alaska are Adapting</a></li>\n\t\t\t\t</ul></p>	AK
+2	<p class="indented" id="region_summary"><p>The Midwest is projected to experience extreme heat, heavy downpours, and flooding that will affect infrastructure, health, agriculture, forestry, transportation, air and water quality, and more. Climate change will also exacerbate a range of risks to the Great Lakes.</p>\n\n\t\t\t\t<div>Use the links below for additional information about:</div>\n\n\t\t\t\t<ul><li><a href="https://www.globalchange.gov/explore/midwest" target="_blank">Climate Impacts on the Midwest</a></li>\n\t\t\t\t\t<li><a href="https://19january2017snapshot.epa.gov/climate-impacts/climate-change-impacts-state_.html" target="_blank">What Climate Change Means for Your State</a></li>\n\t\t\t\t\t<li><a href="/arc-x/regional-guides-adapting-climate-change" target="_blank">How Communities in the Midwest are Adapting</a></li>\n\t\t\t\t</ul></p>	MW
+\.
+
+
+--
+-- TOC entry 3069 (class 0 OID 24712)
+-- Dependencies: 203
+-- Data for Name: area_of_interest; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.area_of_interest (id, name, "position") FROM stdin;
+10	Air Quality	0
+11	Water Management	0
+12	Waste Management & Emergency Reponse	0
+13	Public Health	0
+14	Adaptation Planning	0
+\.
+
+
+--
+-- TOC entry 3071 (class 0 OID 24717)
+-- Dependencies: 205
+-- Data for Name: area_of_interest_items; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.area_of_interest_items (id, parentid, name, value, "position") FROM stdin;
+9	10	Indoor Air	testvalue	0
+13	10	Outdoor Air	testvalue	0
+14	11	Water Utility Facility Operations	testvalue	0
+15	11	Water Quality	testvalue	0
+16	11	Ecosystem Protection	testvalue	0
+17	12	Contaminated Site Management	testvalue	0
+18	12	Disaster Debris Management	testvalue	0
+19	13	Air Quality	testvalue	0
+20	13	Water Quality	testvalue	0
+21	13	Extreme Heat	testvalue	0
+22	14	Getting Started	testvalue	0
+23	14	Comprehensive	testvalue	0
+24	14	Sector-Based	testvalue	0
+\.
+
+
+--
+-- TOC entry 3073 (class 0 OID 24725)
+-- Dependencies: 207
+-- Data for Name: area_of_interest_sub_items; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.area_of_interest_sub_items (id, parentid, name, value, "position") FROM stdin;
+7	13	Ground Level Ozone	testvalue	0
+8	13	Particulate Matter	testvalue	0
+9	14	Drought	testvalue	0
+10	14	Saltwater Intrusion	testvalue	0
+11	14	Sea-level Rise	testvalue	0
+12	14	Storms & Flooding	testvalue	0
+13	14	Source Water Impacts	testvalue	0
+14	15	Stormwater Runoff	testvalue	0
+15	15	Erosion & Sedimentation	testvalue	0
+16	15	Algal Blooms	testvalue	0
+17	16	Wetland Protection	testvalue	0
+18	16	Estuaries	testvalue	0
+19	16	Change in Fish Species	testvalue	0
+\.
+
+
+--
+-- TOC entry 3075 (class 0 OID 24733)
+-- Dependencies: 209
+-- Data for Name: authority; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.authority (id, name) FROM stdin;
+1	ROLE_ADMIN
+\.
+
+
+--
+-- TOC entry 3076 (class 0 OID 24739)
+-- Dependencies: 210
+-- Data for Name: regions; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.regions (id, name, code) FROM stdin;
+1	Northeast	NE
+2	Southeast & Caribbean	SE
+3	Midwest	MW
+4	Great Plains	GP
+5	Southwest	SW
+6	Northwest	NW
+7	Hawai'i & Pacific Islands	HI
+8	Alaska	AK
+\.
+
+
+--
+-- TOC entry 3078 (class 0 OID 24747)
+-- Dependencies: 212
+-- Data for Name: steps_to_help_prepare; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.steps_to_help_prepare (id, name, sub_title, description, "position") FROM stdin;
+7	Case Studies	\N	\N	2
+10	Funding Opportunities	\N	\N	5
+9	Training	\N	\N	4
+8	Tools	\N	\N	3
+5	Implications of Climate Change	\N	\N	0
+6	Adaptation Strategies	\N	\N	1
+11	EPA Contacts & State Websites	\N	\N	6
+\.
+
+
+--
+-- TOC entry 3080 (class 0 OID 24755)
+-- Dependencies: 214
+-- Data for Name: steps_to_help_prepare_items; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.steps_to_help_prepare_items (id, parentid, name, content, aoi_items_id, aoi_sub_items_id, aoi_id, sub_title) FROM stdin;
+7	5	Indoor Air Quality	<li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-indoor-air-quality" target="_blank">Climate Adaptation and Indoor Air Quality</a></li>\n	9	\N	10	\N
+10	6	Indoor Air Quality	<li><a href="https://www.epa.gov/arc-x/outdoor-and-indoor-air-adaptation-strategies-climate-change#tab-2" target="_blank">Indoor Air Adaptation Strategies</a></li>	9	\N	10	\N
+11	7	Indoor Air Quality	No Case Study is currently available that illustrates adapting to Indoor Air climate risks.\n\n\n	9	\N	10	\N
+12	8	Indoor Air Quality	<li><a href="https://www.epa.gov/indoorairplus" target="_blank">Indoor airPlus</a> – This program's construction practices and product specifications could minimize possible future exposure to indoor air pollutants and contaminants made worse by climate change.</li>	9	\N	10	\N
+13	5	Waste and Emergency Management	<li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-contaminated-site-management" target="_blank">Climate Adaptation and Contaminated Site Management</a></li>	17	\N	12	Contaminated Site Management
+14	6	Waste and Emergency Management	<ul><li><a href="https://www.epa.gov/arc-x/adaptation-actions-protecting-waste-facilities" target="_blank">Site Containment</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/adaptation-actions-protecting-waste-facilities#tab-2" target="_blank">Operations &amp; Infrastructure</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/adaptation-actions-protecting-waste-facilities#tab-3" target="_blank">Groundwater Remediation</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/adaptation-actions-protecting-waste-facilities#tab-4" target="_blank">Contaminated Site Remedy</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/adaptation-actions-protecting-waste-facilities#tab-5" target="_blank">Engineered Structures</a></li>\n\t\t\t\t</ul>	17	\N	12	Contaminated Site Management
+15	7	Waste and Emergency Management	<p>Below are two climate change adaptation cases to illustrate adaptation-in-action at waste management and contaminated land sites. The first case, American Cyanamid, illustrates adaptation actions to make a waste site more resilient to future storms. The second case, Barre City, discusses how a community is including future climatic considerations in its redevelopment efforts.</p>\n<ul><li><a href="https://www.epa.gov/arc-x/american-cyanamid-superfund-site-reduces-climate-exposure" target="_blank">Case Study – American Cyanamid:</a> See how American Cyanamid Superfund Site responded to disaster by rebuilding facilities to account for expected climate changes.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/augusta-georgia-brownfield-cleanup" target="_blank">Case Study – Augusta, Georgia:</a> See how a simple checklist helped Augusta, GA, better understand the climate vulnerability of a Brownfields redevelopment project.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/barre-city-vermont-accounts-climate-change-within-brownfield-redevelopment-plan" target="_blank">Case Study – Barre City:</a> See how a brownfield site redevelopment project in Barre City, Vermont used the Analysis of Brownfield Cleanup Alternatives Checklist to better understand climate vulnerability.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/san-francisco-cleans-india-basin-waterfront-brownfield-site-part-greenspace-development-effort" target="_blank">Case Study – San Francisco:</a> See how San Francisco is working to transform brownfields property into greenspace.</li>\n\t\t\t\t</ul>	17	\N	12	Contaminated Site Management
+16	8	Waste Management and Emergency Response & Climate Adaptation	<p>EPA does not have climate change adaptation tools specifically developed for waste management activities. However, the following tools are recommended to help account for potential climate change impacts at contaminated waste sites.</p>\n<ul><li><a href="https://epa.maps.arcgis.com/apps/MapSeries/index.html?appid=852ca645500d419e8c6761b923380663" target="_blank">Storm Surge Inundation and Hurricane Strike Frequency Map</a> – This tool maps current worst-case storm surge, inundation scenarios, and hurricane strike frequency. Based on Sea, Lake, and Overland Surge from Hurricanes models (NOAA/SLOSH), and 100- and 500-year flood plains (FEMA), and hurricane strike dataset from the National Hurricane Center (NHC).</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/water-research/national-stormwater-calculator" target="_blank">Stormwater Calculator with Climate Assessment Tool</a> – Desktop application that estimates the annual amount of rainwater and frequency of runoff from a specific site anywhere in the United States. The calculator includes future climate vulnerability scenarios.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/wsio" target="_blank">Watershed Index Online</a> – The Wetness Index is a computer model of where in the landscape water is expected to pool after a rain event. The tool indicates potential flooding areas other than FEMA 100 year flood plains.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/gcx" target="_blank">Integrated Climate and Land-Use Scenarios (ICLUS)</a> – The ICLUS project provides future scenarios consistent with global-scale, peer-reviewed storylines of population growth and economic development. These can be used to inform projections of future climate.</li>\n\t\t\t\t</ul>	17	\N	12	\N
+17	5	Waste and Emergency Management	<li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-disaster-debris-management" target="_blank">Climate Adaptation and Disaster Debris Management</a></li>	18	\N	12	Disaster Debris Management
+18	6	Waste and Emergency Management	<p>With climate change, the frequency and intensity of storms are expected to increase in many areas. Large amounts of disaster debris is typically generated during such storms. Planning has been identified as an adaptation strategy.</p>\n<li><a href="https://www.epa.gov/homeland-security-waste/waste-management-planning-mitigate-impact-climate-change" target="_blank">Develop a Waste Management Plan</a></li>	18	\N	12	Disaster Debris Management
+19	7	Waste and Emergency Management	<ul><li>No case study is currently available for Disaster Debris Management.</li>\n\t\t\t\t\t<li>To explore other examples of climate adaptation, view <a href="https://www.epa.gov/arc-x/case-studies-climate-change-adaptation" target="_blank">Case Studies for Climate Change Adaptation</a></li>\n\t\t\t\t</ul>	18	\N	12	Disaster Debris Management
+43	6	Water Utilities: Storms 	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-impacts-water-utilities#tab-2" target="_blank">Adaptation Strategies for Storms</a></li>\n</ul>	14	12	11	\N
+8	5	Outdoor Air Quality	<li><a href="https://epa.gov/arc-x/climate-adaptation-and-outdoor-air-quality" target="_blank">Climate Adaptation and Outdoor Air Quality</a></li>	13	\N	10	Ground Level Ozone
+20	8	Waste and Emergency Management: Disaster Debris Management	<p>EPA does not have climate change adaptation tools specifically developed for disaster debris management activities. However, the following tools are recommended to help communities prepare for the potential of more frequent and intense storms.</p>\n<ul><li><a href="https://epa.maps.arcgis.com/apps/MapSeries/index.html?appid=852ca645500d419e8c6761b923380663" target="_blank">Storm Surge Inundation and Hurricane Strike Frequency Map</a> – This tool maps current worst-case storm surge, inundation scenarios, and hurricane strike frequency. Based on Sea, Lake, and Overland Surge from Hurricanes models (NOAA/SLOSH), and 100- and 500-year flood plains (FEMA), and hurricane strike dataset from the National Hurricane Center (NHC).</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/water-research/national-stormwater-calculator" target="_blank">Stormwater Calculator with Climate Assessment Tool</a> – Desktop application that estimates the annual amount of rainwater and frequency of runoff from a specific site anywhere in the United States. The calculator includes future climate vulnerability scenarios.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/wsio" target="_blank">Watershed Index Online</a> – The Wetness Index is a computer model of where in the landscape water is expected to pool after a rain event. The tool indicates potential flooding areas other than FEMA 100 year flood plains.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/gcx" target="_blank">Integrated Climate and Land-Use Scenarios (ICLUS)</a> – The ICLUS project provides future scenarios consistent with global-scale, peer-reviewed storylines of population growth and economic development. These can be used to inform projections of future climate.</li>\n\t\t\t\t</ul>	18	\N	12	\N
+21	5	Public Health: Air Quality	<li><a href="https://www.epa.gov/arc-x/climate-adaptation-air-quality-and-health" target="_blank">Climate Adaptation and Public Health – Air Quality</a></li>	19	\N	13	\N
+22	6	Public Health: Air Quality	<li><a href="https://www.epa.gov/arc-x/public-health-adaptation-strategies-climate-change" target="_blank">Adaptation Strategies for Public Health</a></li>	19	\N	13	\N
+23	7	Public Health: Air Quality	<div><p>Climate change impacts including rising temperatures, storm pattern changes, more extreme weather events, and rising sea levels can affect environmental related public health stressors. Below are several examples of climate change adaptation related to air quality and public health.</p></div>\n\n<ul><li><a href="https://www.epa.gov/arc-x/salt-lake-city-utah-adapts-improve-air-quality-through-smart-growth" target="_blank">Salt Lake City, Utah Adapts to Improve Air Quality Through Smart Growth</a> – See how Salt Lake City has been recognized for increasing climate resilience and adaptation. The city's sustainability plan set goals to improve air quality, protect community health, and reduce particulate matter (PM) and ozone pollution (which can worsen respiratory illnesses and are both projected to be exacerbated by climate change).</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/california-prepares-increased-wildfire-risk-air-quality-climate-change" target="_blank">California Prepares for Increased Wildfire Risk to Air Quality From Climate Change</a> – See how California is anticipating how climate change will affect wildfires and associated public health concerns and adapting by protecting forests, increasing public awareness of proper land management.</li>\n          <li><a href="https://www.epa.gov/arc-x/central-new-mexico-prepares-climate-change-its-long-and-short-range-metropolitan" target="_blank">Central New Mexico Prepares for Climate Change in Its Long- and Short-Range Metropolitan Transportation Plan</a></li>\n        \t<li><a href="https://www.epa.gov/arc-x/massachusetts-surveys-climate-readiness-public-health-departments" target="_blank">Massachusetts Surveys Climate Readiness of Public Health Departments</a> – See how Massachusetts surveyed its local boards of public health to gauge the state's level of public health preparedness for climate change. The survey covered surveillance, planning, and intervention activities associated with heat stress, hazardous weather events, indoor air quality, food supply/agricultural issues, vector-borne diseases, and water quality issues.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/minnesota-assesses-climate-risk-public-health" target="_blank">Minnesota Assesses Climate Risk to Public Health</a> – See how Minnesota's Strategic Adaptation Plan (2010) identifies public health threats from climate change and states the necessity of improving its public health system's capacity to respond to these threats, particularly for vulnerable populations. The plan includes consideration of air pollution and extreme heat events.</li>\n\t\t\t\t</ul>	19	\N	13	\N
+24	5	Public Health: Extreme Heat	<li>View <a href="https://www.epa.gov/arc-x/climate-adaptation-extreme-heat-and-health" target="_blank">Climate Adaptation and Public Health – Extreme Heat</a></li>	21	\N	13	\N
+25	6	Public Health: Extreme Heat	<li><a href="https://www.epa.gov/arc-x/public-health-adaptation-strategies-climate-change" target="_blank">Adaptation Strategies for Public Health</a></li>	21	\N	13	\N
+26	7	Public Health: Extreme Heat	<p>Climate change impacts including rising temperatures, storm pattern changes, more extreme weather events, and rising sea levels can affect enviromental related public health stressors. Several examples of communities adapting to the threat of more frequent extreme heat events are provided below.</p>\n<ul><li><a href="https://www.epa.gov//arc-x/chicago-il-adapts-improve-extreme-heat-preparedness" target="_blank">Chicago, IL Adapts to Improve Extreme Heat Preparedness</a> – See how Chicago has adopted a comprehensive set of actions to reduce deaths from extreme heat events. Chicago actively engaged the local community and targeted vulnerability neighborhoods to help identify how residents could reduce the impact of climate exacerbated extreme heat events.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov//arc-x/new-york-city-assesses-extreme-heat-climate-risk" target="_blank">New York City Assesses Extreme Heat Climate Risk</a> – See how New York City, recognizing the current and future extreme heat risk to its population, decided to assess its climate risk and vulnerability.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov//arc-x/new-york-city-adapts-deal-projected-increase-heat-waves" target="_blank">New York City Adapts To Deal with Projected Increase of Heat Waves</a> – New York City has taken substantive actions to reduce its current vulnerability (i.e., increasing its resiliency to current conditions) as well as its future vulnerability (i.e., adapting to the projected future climatic conditions) associated with heat waves.</li>\n\t\t\t\t</ul>	21	\N	13	\N
+44	6	Water Utilities: Source Water Impacts	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-impacts-water-utilities#tab-3" target="_blank">Adaptation Strategies for Source Water Impacts</a></li>\n</ul>	14	13	11	\N
+27	5	Adaptation Planning: Getting Started	<div>There is no "one-size fits all" approach for communities to anticipate, plan, and adapt.</div>\n<div>The U.S. Climate Resilience Toolkit is a great place to learn more and begin your adaptation planning efforts.</div>\n<ul><li><a href="https://toolkit.climate.gov/steps-to-resilience/explore-hazards" target="_blank">U.S. Climate Resilience Toolkit</a></li></ul>\n<div>See a couple of alternative ways communities have organized their efforts.</div>\n<ul><li><a href="https://www.epa.gov//arc-x/planning-climate-change-adaptation" target="_blank">Planning for Climate Change Adaptation</a></li>\n\t\t\t\t</ul>	22	\N	14	\N
+28	6	Adaptation Planning	The U.S. Climate Resilience Toolkit provides useful adaptation planning strategies for communities. The site includes resources (e.g., data, tools, case studies) from across the federal government to help communities put their plans into action.\n\n<ul><li><a href="https://toolkit.climate.gov/steps-to-resilience/explore-hazards" target="_blank">U.S. Climate Resilience Toolkit</a></li>\n\t\t\t\t</ul>	\N	\N	14	\N
+45	7	Water Utilities: Drought	<ul><li><a href="https://www.epa.gov/arc-x/fredericktown-missouri-prepares-climate-change-drought-risk" target="_blank">Fredericktown, Missouri Prepares for Climate Change Drought Risk</a> – See how a water utility in Fredericktown, MO used an EPA tool to assess climate vulnerability for their source water from drought, erosion and sedimentation.</li>\n\t\t\t\t</ul>	14	9	11	\N
+30	8	Adaptation Planning  & Climate Adaptation	<ul><li><a href="https://www.epa.gov/arc-x/community-based-adaptation-changing-climate" target="_blank">Community-Based Adaptation to a Changing Climate</a> – This handout describes the impacts of climate change on local government services, provides illustrative adaptation strategies, and includes examples of community-based adaptation actions.</li>\n\t\t\t\t\t<li><a href="https://toolkit.climate.gov/steps-to-resilience/explore-hazards" target="_blank">U.S. Climate Resilience Toolkit</a></li>\n\t\t\t\t\t<li><a href="https://www.globalchange.gov/nca4" target="_blank">National Climate Assessment</a></li>\n\t\t\t\t</ul>\n\n<p class="indented">The above list is a subset of all EPA tools. To explore EPA Tools more fully, view <a href="https://www.epa.gov/arc-x/tools-climate-change-adaptation" target="_blank">Tools for Climate Change Adaptation</a>.</p>	\N	\N	14	\N
+31	5	Adaptation Planning: Comprehensive Planning	<p>A number of local governments have found planning and assessing vulnerability across the broad range of government services as an effective approach to anticipate, plan for, and adapt.</p>\n<li><a href="https://www.epa.gov/arc-x/planning-climate-change-adaptation" target="_blank">Planning for Climate Change Adaptation</a></li>	23	\N	14	\N
+29	7	Adaptation Planning	<ul><li><a href="https://www.epa.gov/arc-x/city-boston-plans-adaptation" target="_blank">Adaptation Action: The City of Boston Plans for Adaptation</a> – See the process by which the Boston city government assessed vulnerability and developed an adaptation plan to respond to sea level rise and other climate risks.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/metropolitan-washington-council-governments-identified-smart-growth-strategies-more-resilient" target="_blank">Adaptation Action: Metropolitan Washington Council of Governments Identified Smart Growth Strategies for More Resilient Communities</a> – See how the Metropolitan Washington Council of Governments developed an adaptation plan with policy options for the consideration of its local jurisdictions.</li>\n\t\t\t\t</ul>\n\n<div>A number of communities have found it advantageous to work collaboratively with neighboring communities to advance their adaptation planning goals.</div>\n\n<ul><li><a href="https://www.epa.gov/arc-x/southeast-florida-compact-analyzes-sea-level-rise-risk" target="_blank">Adaptation Action: Southeast Florida Compact Analyzes Sea Level Rise Risk</a> – See how South Florida counties and municipalities partnered to develop a comprehensive sea level rise assessment.</li>\n\t\t\t\t</ul>	\N	\N	14	\N
+32	5	Adaptation Planning: Sector Based Planning	<p>A number of local governments have found focusing on a particular sector (e.g., Water Utility) as a practical way to make progress.</p>\n<ul><li><a href="https://www.epa.gov/arc-x/planning-climate-change-adaptation" target="_blank">Planning for Climate Change Adaptation</a></li>\n\t\t\t\t</ul>	24	\N	14	\N
+33	7	Adaptation Studies: Sector Based	<ul><li><a href="https://www.epa.gov/arc-x/manchester-sea-massachusetts-assesses-climate-vulnerability" target="_blank">Manchester-by-the-Sea, Massachusetts Assesses Climate Vulnerability</a> – See how Manchester-by-the-sea used a EPA tool to help assess drinking water system vulnerability to sea level rise.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/san-juan-bay-estuary-program-assesses-vulnerability-and-targets-adaptation-measures" target="_blank">San Juan Bay Estuary Program Assesses Vulnerability and Targets Low Risk Adaptation Measures</a> – See how the San Juan Bay Estuary Program assessed climate risk to the bay and identified adaptation strategies to reduce ecosystem vulnerability from changing climate conditions.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/massachusetts-surveys-climate-readiness-public-health-departments" target="_blank">Massachusetts Surveys Climate Readiness of Public Health Departments</a> – See how Massachusetts has surveyed local health departments to assess vulnerability to expected climate changes.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/minnesota-assesses-climate-risk-public-health" target="_blank">Minnesota Assesses Climate Risk to Public Health</a> – See how Minnesota has assessed projected public health risks from climate change across the state.</li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/arc-x/california-prepares-increased-wildfire-risk-air-quality-climate-change" target="_blank">California Prepares for Increased Wildfire Risk to Air Quality From Climate Change</a> – See how California is improving resiliency to particulate matter threats by planning to adapt to increased climate threats from wildfires.</li>\n\t\t\t\t</ul>	24	\N	14	\N
+34	8	Adaptation Planning: EPA Sector Based Tools:	<ul><li><a href="https://www.epa.gov/crwu" target="_blank">Creating Resilient Water Utilities</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/cre" target="_blank">Climate Ready Estuaries</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/land-revitalization/climate-smart-brownfields-manual" target="_blank">Climate Smart Brownfields Manual</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/homeland-security-waste/waste-management-planning-mitigate-impact-climate-change" target="_blank">Mitigating Climate Impacts to Waste Management</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/superfund/superfund-climate-resilience" target="_blank">Superfund Climate Change Adaptation</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/indoor-air-quality-iaq/adapting-buildings-indoor-air-quality-changing-climate" target="_blank">Adapting Buildings For Indoor Air Quality in a Changing Climate</a></li>\n\t\t\t\t\t<li><a href="https://www.epa.gov/heatislands/climate-change-and-heat-islands" target="_blank">Climate Change, Extreme Heat and the Urban Heat Island</a></li>\n\t\t\t\t</ul>	\N	\N	\N	\N
+35	5	Water Utility Facility Operations: Drought	<ul><li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-drought" target="_blank">Climate Adaptation and Drought</a></li>\n</ul>	14	9	11	\N
+36	5	Water Utilities: Saltwater Intrusion	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-adaptation-and-saltwater-intrusion" target="_blank">Climate Adaptation and Saltwater Intrusion</a>\n</li></ul>	14	10	11	\N
+37	5	Water Utilities: Sea Level Rise	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-adaptation-and-sea-level-rise" target="_blank">Climate Adaptation and Sea Level Rise</a>\n</li></ul>	14	11	11	\N
+38	5	Water Utilities: Storms & Flooding	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-adaptation-and-storms-flooding" target="_blank">Climate Adaptation and Storms</a></li></ul>\n	14	12	11	\N
+39	5	Water Utilities: Source Water Impacts	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-adaptation-and-source-water-impacts" target="_blank">Climate Adaptation and Source Water Impacts</a>\n</li></ul>	14	13	11	\N
+40	6	Water Utilities: Drought	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-impacts-water-utilities#tab-1" target="_blank">Adaptation Strategies for Drought</a></li>\n</ul>	14	9	11	\N
+41	6	Water Utilities: Saltwater Intrusion	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-impacts-water-utilities#tab-3" target="_blank">Adaptation Strategies for Saltwater Intrusion</a></li>\n</ul>	\N	\N	\N	\N
+42	6	Water Utilities: Sea Level Rise	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-impacts-water-utilities#tab-4" target="_blank">Adaptation Strategies for Sea Level Rise</a></li>\n</ul>	14	11	11	\N
+46	7	Water Utilities: Saltwater Intrusion	<ul><li><a href="https://www.epa.gov/arc-x/tampa-bay-diversifies-water-sources-reduce-climate-risk" target="_blank">Tampa Bay Diversifies Water Sources to Reduce Climate Risk</a> – See how a Tampa, FL water utility reduced vulnerability and evaluated climate threats from drought and saltwater intrusion.</li>\n\t\t\t\t</ul>	14	10	11	\N
+47	7	Water Utilities: Sea Level Rise	<ul><li><a href="https://www.epa.gov/arc-x/boston-raises-wastewater-facility-avoid-inundation" target="_blank">Boston Raises Wastewater Facility to Avoid Inundation</a> – See how Boston's Deer Island Water Treatment Facility redesigned their facility to account for expected sea levels and routinely evaluates performance under the best-available climate science.</li>\n\t\t\t\t</ul>	14	11	11	\N
+48	7	Water Utilities: Storms	<ul><li><a href="https://www.epa.gov/arc-x/blue-plains-wastewater-facility-washington-dc-reinforces-facility-against-floods" target="_blank">Washington, DC Wastewater Facility Reinforces Facility Against Floods</a> – See how a wastewater utility in Washington, DC is protecting their facility by building a sea wall that accounts for higher river elevations and changing climate conditions.</li>\n\t\t\t\t</ul>	14	12	11	\N
+49	7	Water Utilities: Source Water Impacts	<ul><li><a href="https://www.epa.gov/arc-x/southern-nevada-water-authority-assesses-vulnerability-climate-change" target="_blank">Southern Nevada Water Authority Assesses Vulnerability To Climate Change</a> – See how the Southern Nevada Water Authority used an EPA tool to better assess climate vulnerability of source water to drought and harmful algal blooms.</li>\n\t\t\t\t</ul>	14	13	11	\N
+50	8	Water Utilities & Climate Adaptation	We have identified several tools that may be of interest to you based on your selection. The direct link to these tools are provided below. However, to explore all tools that may be relevant to this selection view <a href="https://www.epa.gov/arc-x/tools-water-related-climate-change-adaptation#tab-2" target="_blank">Water Utility Tools</a>.</div>\n\n\t\t\t\t<ul><li><a href="https://www.epa.gov/crwu/climate-resilience-evaluation-and-awareness-tool-creat-risk-assessment-application-water" target="_blank">CREAT, Climate Resilience Evaluation and Awareness Tool</a> – This tool can assist drinking water and wastewater utility owners and operators in understanding potential climate change threats and in assessing the related risks at their individual utilities, including from drought, saltwater intrusion, sea level rise and source water impacts.</li>\n\t\t\t\t\t<li><a href="https://epa.maps.arcgis.com/apps/MapSeries/index.html?appid=3805293158d54846a29f750d63c6890e" target="_blank">Scenario-Based Projected Changes Map</a> – This mapping tool provides easy to access scenarios of projected changes from EPA's Climate Resilience Evaluation and Awareness Tool for annual total precipitation, annual average temperature, precipitation intensity for the 100-year storm, number of days per year with temperatures above 100 F, and sea level rise for coastal locations.</li>\n\t\t\t\t\t<li><a href="https://epa.maps.arcgis.com/apps/MapSeries/index.html?appid=852ca645500d419e8c6761b923380663" target="_blank">Storm Surge Inundation and Hurricane Strike Frequency Map</a> – This mapping tool illustrates current worst-case coastal storm surge or inundation scenarios and hurricane strike frequency derived from Sea, Lake, and Overland Surge from Hurricanes (SLOSH) models by the National Oceanic and Atmospheric Administration (NOAA), 100 and 500 year flood plains from the Federal Emergency Management Agency (FEMA), and hurricane strike dataset from the National Hurricane Center (NHC).</li>\n\t\t\t\t\t<li><a href="https://allaboutwatersheds.org/new-mexico-water-dialogue/library/documents/climate-change-handbook-for-regional-water-planning/view" target="_blank">Climate Change Handbook for Regional Water Planning</a> <a class="exit-disclaimer" href="/home/exit-epa" title="EPA's External Link Disclaimer">Exit</a> – The Handbook provides a framework for considering climate change in water management planning. The handbook guides resource managers and planners with key decision considerations, resources, tools, and decision options to adapt to a changing climate, including to specific concerns over drought.</li>\n\t\t\t\t</ul>	14	\N	11	\N
+51	5	Water Quality: Stormwater Runoff	<ul><li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-stormwater-runoff" target="_blank">Climate Adaptation and Stormwater Runoff</a></li></ul>	15	14	11	\N
+52	5	Water Quality: Erosion 	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-adaptation-and-erosion-sedimentation" target="_blank">Climate Adaptation and Erosion and Sedimentation</a>\n</li></ul>	15	15	11	\N
+53	5	Water Quality: Algal Blooms	<ul><li>\n<a href="/arc-x/climate-adaptation-and-harmful-algal-blooms" target="_blank">Climate Adaptation and Harmful Algal Blooms</a>\n</li></ul>	15	16	11	\N
+54	6	Water Quality: Stormwater Runoff	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-impacts-water-quality#tab-1" target="_blank">Adaptation Strategies for Stormwater Runoff</a>\n</li></ul>	15	14	11	\N
+55	6	Water Quality: Erosion and Sedimentation Rates	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-impacts-water-quality#tab-2" target="_blank">Adaptation Strategies for Erosion and Sedimentation</a>\n</li></ul>	15	15	11	\N
+56	6	Water Quality: Harmful Algal Blooms	<ul><li>\n<a href="https://www.epa.gov/arc-x/climate-impacts-water-quality#tab-3" target="_blank">Adaptation Strategies for Harmful Algal Blooms</a>\n</li></ul>	15	16	11	\N
+57	7	Water Quality: Stormwater	<ul><li><a href="https://www.epa.gov/arc-x/minnehaha-mn-creek-watershed-district-assesses-stormwater-management-climate-vulnerability" target="_blank">Minnehaha, MN Creek Watershed District Assesses Stormwater Management Climate Vulnerability</a> – See how the Minnehaha Creek Watershed District in Minnesota considered climate projections to better understand climate threats and vulnerability to stormwater management capabilities.</li>\n\t\t\t\t</ul>	15	14	11	\N
+58	7	Water Quality: Erosion and Sedimentation	<ul><li><a href="https://www.epa.gov/arc-x/pennsylvania-protects-coldwater-fisheries-and-water-quality-climate-change" target="_blank">Pennsylvania Protects Coldwater Fisheries and Water Quality from Climate Change</a> – See how Pennsylvania is planning to adapt to climate threats to water quality criteria and protect ecosystem health, particularly for cold water fisheries.</li>\n\t\t\t\t</ul>	15	15	11	\N
+59	7	Water Quality: Harmful Algal Blooms	<ul><li><a href="https://www.epa.gov/arc-x/southern-nevada-water-authority-assesses-vulnerability-climate-change" target="_blank">Southern Nevada Water Authority Assesses Vulnerability To Climate Change</a> – See how the Southern Nevada Water Authority used an EPA tool to better assess climate vulnerability to drought and harmful algal blooms.</li>\n\t\t\t\t</ul>	15	16	11	\N
+60	8	Water Quality & Climate Adaptation	<p>We have identified several tools that may be of interest to you based on your selection. The direct link to these tools are provided below. However, to explore all tools that may be relevant to this selection view </p>\n<div>For a view at the projected changes (2035 and 2060) for your region and how they may impact stormwater runoff, such as the anticipated intensity of the 100 year storm, view:</div>\n<ul><li><a href="https://epa.maps.arcgis.com/apps/MapSeries/index.html?appid=3805293158d54846a29f750d63c6890e" target="_blank">Scenario-Based Projected Changes Map</a> – This mapping tool provides easy to access scenarios of projected changes from EPA's Climate Resilience Evaluation and Awareness Tool for annual total precipitation, annual average temperature, precipitation intensity for the 100-year storm, number of days per year with temperatures above 100 F, and sea level rise for coastal locations.</li>\n\t\t\t\t</ul>\n<div>To model climate risks to urban runoff from a municipal or community-level, view:</div>\n<ul><li><a href="https://www.epa.gov/water-research/storm-water-management-model-swmm" target="_blank">Storm Water Management Model with Climate Adjustment Tool (SWMM-CAT)</a> – A comprehensive computer model for analysis of quantity and quality problems associated with urban runoff.</li>\n\t\t\t\t</ul>\n<div>To model erosion and sedimentation anticipated under future climate scenarios, view:</div>\n\n<ul><li><a href="https://www.tucson.ars.ag.gov/swrc_site/tools/weppcat" target="_blank">Water Erosion Prediction Project (WEPPCAT) Model</a> – An online tool for assessing and managing the potential impacts of climate change on sediment loading to streams using the Water Erosion Prediction Project (WEPP) Model.</li>\n\t\t\t\t</ul>\n\n<div>To model water quality changes and contributors to harmful algal bloom outbreaks, view:</div>\n<ul><li><a href="https://www.epa.gov/waterdata/hawqs-hydrologic-and-water-quality-system" target="_blank">Hydrologic and Water Quality System (HAWQS Tool)</a> – HAWQS is a water quantity and quality modeling system to evaluate the impacts of management alternatives, pollution control scenarios and climate change scenarios on the quantity and quality of water at a national scale.</li>\n\t\t\t\t</ul>\n\n<p class="indented">The above list is a subset of all EPA tools. To explore EPA Tools more fully, view <a href="https://www.epa.gov/arc-x/tools-climate-change-adaptation" target="_blank">Tools for Climate Change Adaptation</a>.</p>\n	15	\N	11	\N
+62	5	Ecosystem Protection: Change in Fish Species	<ul><li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-change-fish-species" target="_blank">Climate Adaptation and Fish Species</a></li>\n\t\t\t\t</ul>	16	19	11	\N
+61	5	Ecosystem Protection:  Wetlands Protection	<ul>\n<li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-wetland-protection" target="_blank">Climate Adaptation and Wetlands</a></li></ul>	16	17	11	\N
+63	5	Ecosystem Protection: Estuaries	<ul><li><a href="https://www.epa.gov/arc-x/climate-adaptation-and-estuaries" target="_blank">Climate Adaptation and Estuaries</a></li>\n\t\t\t\t</ul>	16	18	11	\N
+64	5	Outdoor Air Quality: Particulate Matter (PM)	<strong>Climate Change Implications to Particulate Matter (PM) Air Quality</strong>\n<div>Climate change may increase the levels of particulate matter which may increase public health risk. Worsening of wildfires and droughts may further exacerbate airborne particulate matter and may lead to public health risk.</div>\n<ul><li>For more about outdoor air issues with climate change view <a href="https://epa.gov/arc-x/climate-adaptation-and-outdoor-air-quality" target="_blank">Outdoor Air and Climate Change Adaptation</a>.</li>\n\t\t\t\t\t<li>For information on the public health impacts of PM, view <a href="https://epa.gov/arc-x/climate-adaptation-particulate-matter-and-health" target="_blank">Particulate Matter and Health</a>.</li>\n\t\t\t\t\t<li>For more about the affects of climate change to air quality more generally, view <a href="https://epa.gov/arc-x/climate-adaptation-outdoor-air-quality-and-health" target="_blank">Outdoor Air Quality and Health</a>.</li>\n\t\t\t\t</ul>\n	13	8	10	\N
+65	6	Outdoor Air Quality: Particulate Matter (PM)	<div>Climate change can increase particulate matter (PM) levels through increases in the frequency or intensity of wildfires. The following strategies represent voluntary outdoor air strategies that states and localities can pursue to help adapt to anticipated climate changes.</div>\n<ul><li><a href="https://epa.gov/arc-x/outdoor-and-indoor-air-adaptation-strategies-climate-change#tab-1" target="_blank">Outdoor Air Adaptation Strategies</a></li>\n\t\t\t\t\t<li><a href="https://epa.gov/arc-x/public-health-adaptation-strategies-climate-change#tab-3" target="_blank">Air Quality Adaptation Strategies</a></li>\n\t\t\t\t</ul>	13	8	10	\N
+66	6	Outdoor Air Quality: Ground-level Ozone	<ul><li><a href="https://epa.gov/arc-x/outdoor-and-indoor-air-adaptation-strategies-climate-change#tab-1" target="_blank">Outdoor Air Adaptation Strategies</a></li>\n\t\t\t\t</ul>	13	7	10	\N
+67	7	Outdoor Air Quality: Ground-level Ozone	<div>The case studies highlight communities that have undertaken actions to adapt to climate risks. In each case study, information is provided on "How They Did It" and tools to help you replicate their actions.</div>\n<ul><li><a href="https://epa.gov/arc-x/central-new-mexico-prepares-climate-change-its-long-and-short-range-metropolitan" target="_blank">Central New Mexico Prepares for Climate Change in Its Long- and Short-Range Metropolitan Transportation Plan</a></li>\n\t\t\t\t\t<li><a href="https://epa.gov/arc-x/salt-lake-city-utah-adapts-improve-air-quality-through-smart-growth" target="_blank">Salt Lake City, Utah Adapts to Improve Air Quality Through Smart Growth</a></li>\n\t\t\t\t</ul>	13	7	10	\N
+68	7	Outdoor Air Quality: Particulate Matter (PM)	Here is an example of how one community is adapting to the potential of worsening air quality under a changing climate. California is anticipating a future that may include more human exposure to particulate matter due to more frequent and intense wildfires.\n\n<ul><li><a href="https://epa.gov/arc-x/california-prepares-increased-wildfire-risk-air-quality-climate-change" target="_blank">California Prepares for Increased Wildfire Risk to Air Quality From Climate Change</a> – See how California is improving resiliency to particulate matter threats by planning to adapt to increased climate threats from wildfires.</li>\n\t\t\t\t</ul>	13	8	10	\N
+69	8	Outdoor Air Quality	EPA does not have climate change adaptation tools specifically developed for outdoor air. However, the following tools from other EPA programs are recommended to help communities prepare for the potential impacts of climate change and outdoor air.\n<ul><li><a href="https://epa.gov/smartgrowth/enhancing-sustainable-communities-green-infrastructure" target="_blank">Enhancing Sustainable Communities With Green Infrastructure Guide</a> – plane for multiple environmental, health, social, and economic benefits.</li>\n\t\t\t\t\t<li><a href="https://epa.gov/sustainability/giwiz" target="_blank">Green Infrastructure Wizard (GIWiz)</a> – explore EPA's Green Infrastructure tools and resources.</li>\n\t\t\t\t</ul>\n	13	\N	10	Ground-Level Ozone and Particulate Matter
+\.
+
+
+--
+-- TOC entry 3082 (class 0 OID 24763)
+-- Dependencies: 216
+-- Data for Name: steps_to_help_prepare_sub_items; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.steps_to_help_prepare_sub_items (id, parentid, content, aoi_items_id, aoi_sub_items_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3083 (class 0 OID 24769)
+-- Dependencies: 217
+-- Data for Name: user; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data."user" (id, email, enabled, password, username) FROM stdin;
+1	powell.joshua@epa.gov	t	$2y$07$IVx1MCFc.ksiD.xkwWMJxutD5qFDblNXs/qa6xEvRjk9s7C.mvLv6	jpowel01
+\.
+
+
+--
+-- TOC entry 3084 (class 0 OID 24775)
+-- Dependencies: 218
+-- Data for Name: user_authority; Type: TABLE DATA; Schema: data; Owner: postgres
+--
+
+COPY data.user_authority (user_id, authority_id) FROM stdin;
+1	1
+\.
+
+
+--
+-- TOC entry 3090 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: additional_information_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.additional_information_id_seq', 8, true);
+
+
+--
+-- TOC entry 3091 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: area_of_interest_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.area_of_interest_id_seq', 14, true);
+
+
+--
+-- TOC entry 3092 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: area_of_interest_items_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.area_of_interest_items_id_seq', 24, true);
+
+
+--
+-- TOC entry 3093 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: area_of_interest_sub_items_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.area_of_interest_sub_items_id_seq', 19, true);
+
+
+--
+-- TOC entry 3094 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: regions_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.regions_id_seq', 8, true);
+
+
+--
+-- TOC entry 3095 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: steps_to_help_prepare_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.steps_to_help_prepare_id_seq', 11, true);
+
+
+--
+-- TOC entry 3096 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: steps_to_help_prepare_items_id_seq; Type: SEQUENCE SET; Schema: data; Owner: postgres
+--
+
+SELECT pg_catalog.setval('data.steps_to_help_prepare_items_id_seq', 69, true);
+
+
+--
+-- TOC entry 2913 (class 2606 OID 24779)
+-- Name: additional_information additional_information_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.additional_information
+    ADD CONSTRAINT additional_information_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2919 (class 2606 OID 24781)
+-- Name: area_of_interest_sub_items area_of_interest_items_pk; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.area_of_interest_sub_items
+    ADD CONSTRAINT area_of_interest_items_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2917 (class 2606 OID 24783)
+-- Name: area_of_interest_items area_of_interest_items_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.area_of_interest_items
+    ADD CONSTRAINT area_of_interest_items_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2915 (class 2606 OID 24785)
+-- Name: area_of_interest area_of_interest_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.area_of_interest
+    ADD CONSTRAINT area_of_interest_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2921 (class 2606 OID 24787)
+-- Name: regions regions_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.regions
+    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2925 (class 2606 OID 24789)
+-- Name: steps_to_help_prepare_items steps_to_help_prepare_items_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_items
+    ADD CONSTRAINT steps_to_help_prepare_items_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2923 (class 2606 OID 24791)
+-- Name: steps_to_help_prepare steps_to_help_prepare_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare
+    ADD CONSTRAINT steps_to_help_prepare_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2927 (class 2606 OID 24793)
+-- Name: steps_to_help_prepare_sub_items steps_to_help_prepare_sub_items_pkey; Type: CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_sub_items
+    ADD CONSTRAINT steps_to_help_prepare_sub_items_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2930 (class 2606 OID 24794)
+-- Name: steps_to_help_prepare_items aoi_id_fk; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_items
+    ADD CONSTRAINT aoi_id_fk FOREIGN KEY (aoi_id) REFERENCES data.area_of_interest(id);
+
+
+--
+-- TOC entry 2931 (class 2606 OID 24799)
+-- Name: steps_to_help_prepare_items aoi_items_id_fk; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_items
+    ADD CONSTRAINT aoi_items_id_fk FOREIGN KEY (aoi_items_id) REFERENCES data.area_of_interest_items(id);
+
+
+--
+-- TOC entry 2934 (class 2606 OID 24804)
+-- Name: steps_to_help_prepare_sub_items aoi_items_id_fk; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_sub_items
+    ADD CONSTRAINT aoi_items_id_fk FOREIGN KEY (aoi_items_id) REFERENCES data.area_of_interest_items(id);
+
+
+--
+-- TOC entry 2932 (class 2606 OID 24809)
+-- Name: steps_to_help_prepare_items aoi_sub_items_id_fk; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_items
+    ADD CONSTRAINT aoi_sub_items_id_fk FOREIGN KEY (aoi_sub_items_id) REFERENCES data.area_of_interest_sub_items(id);
+
+
+--
+-- TOC entry 2935 (class 2606 OID 24814)
+-- Name: steps_to_help_prepare_sub_items aoi_sub_items_id_fk; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_sub_items
+    ADD CONSTRAINT aoi_sub_items_id_fk FOREIGN KEY (aoi_sub_items_id) REFERENCES data.area_of_interest_sub_items(id);
+
+
+--
+-- TOC entry 2929 (class 2606 OID 24819)
+-- Name: area_of_interest_sub_items area_of_interest_items_fk_sub; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.area_of_interest_sub_items
+    ADD CONSTRAINT area_of_interest_items_fk_sub FOREIGN KEY (parentid) REFERENCES data.area_of_interest_items(id);
+
+
+--
+-- TOC entry 2928 (class 2606 OID 24824)
+-- Name: area_of_interest_items parent_id_fk_constraint; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.area_of_interest_items
+    ADD CONSTRAINT parent_id_fk_constraint FOREIGN KEY (parentid) REFERENCES data.area_of_interest(id);
+
+
+--
+-- TOC entry 2933 (class 2606 OID 24829)
+-- Name: steps_to_help_prepare_items steps_to_help_prepare_fk_items; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_items
+    ADD CONSTRAINT steps_to_help_prepare_fk_items FOREIGN KEY (parentid) REFERENCES data.steps_to_help_prepare(id);
+
+
+--
+-- TOC entry 2936 (class 2606 OID 24834)
+-- Name: steps_to_help_prepare_sub_items steps_to_help_prepare_fk_sub_items; Type: FK CONSTRAINT; Schema: data; Owner: postgres
+--
+
+ALTER TABLE ONLY data.steps_to_help_prepare_sub_items
+    ADD CONSTRAINT steps_to_help_prepare_fk_sub_items FOREIGN KEY (parentid) REFERENCES data.steps_to_help_prepare_items(id);
+
+
+-- Completed on 2021-07-01 10:02:42
+
+--
+-- PostgreSQL database dump complete
+--
+

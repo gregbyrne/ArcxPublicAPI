@@ -1,0 +1,184 @@
+stages:
+  - build
+  - images
+  - Development
+  - Staging
+  - "Data Export"
+  - "Data Import"
+  - Image Scan
+
+default:
+  tags:
+    - devsecops-instance 
+
+build-app:
+  stage: build
+  image: maven:3-openjdk-11
+  script:
+    - mkdir -p /root/.m2/repository/org/springframework/
+    - mkdir -p /root/.m2/repository/io/
+    - unzip static-deps/data.zip -d /root/.m2/repository/org/springframework
+    - unzip static-deps/swagger.zip -d /root/.m2/repository/io
+    - mvn install -DskipTests
+  artifacts:
+    paths:
+      - target/arcx-0.0.1-SNAPSHOT.jar
+
+public-api-app:image:build:
+  stage: images
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/public-api-app/Dockerfile --destination $CI_REGISTRY_IMAGE/public-api-app:$CI_COMMIT_SHORT_SHA
+
+public-api-web:image:build:
+  stage: images
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/public-api-web/Dockerfile --destination $CI_REGISTRY_IMAGE/public-api-web:$CI_COMMIT_SHORT_SHA
+
+db:image:build:
+  stage: images
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/db/Dockerfile --destination $CI_REGISTRY_IMAGE/db:$CI_COMMIT_SHORT_SHA
+
+datapipeline:image:build:
+  stage: images
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/docker/datapipeline/Dockerfile --destination $CI_REGISTRY_IMAGE/datapipeline:$CI_COMMIT_SHORT_SHA
+
+Deploy to Development:
+  when: manual
+  stage: Development
+  image: dtzar/helm-kubectl
+  script:
+    - apk add gettext
+    - kubectl config set-cluster $KUBECTL_DEV_CLUSTER --server="$KUBE_URL"
+    - kubectl config set-cluster $KUBECTL_DEV_CLUSTER --certificate-authority=$KUBE_CA_PEM_FILE --embed-certs=true
+    - kubectl config set-credentials gitlab --token="$KUBE_TOKEN"
+    - kubectl config set-context default --cluster="$KUBECTL_DEV_CLUSTER" --user=gitlab --namespace="$KUBE_NAMESPACE"
+    - kubectl config use-context default
+    - envsubst < k8s/arcx-configmap.yml | kubectl apply -f -
+    # - envsubst < k8s/arcx-volumes.yml | kubectl apply -f -
+    - envsubst < k8s/arcx-db.yml | kubectl apply -f -
+    - envsubst < k8s/arcx-public-api-app.yml | kubectl apply -f -
+    - envsubst < k8s/arcx-public-api-web.yml | kubectl apply -f -
+  environment:
+    name: dev
+    url: https://arc-x-public-api.devsecops-dev.aws.epa.gov
+    kubernetes:
+      namespace: arc-x-public-api-238-dev
+  only:
+    - branches
+  except:
+    - master
+
+# Deploy to Staging:
+#   when: manual
+#   stage: Staging
+#   image: dtzar/helm-kubectl
+#   variables:
+#     INGRESS_HOST: "arcx-public-api-stg.devsecops-eval.epa.gov"
+#   script:
+#     - apk add gettext
+#     - kubectl config set-cluster stg-cluster --server="$KUBE_URL"
+#     - kubectl config set-cluster stg-cluster --certificate-authority=$KUBE_CA_PEM_FILE --embed-certs=true
+#     - kubectl config set-credentials gitlab --token="$KUBE_TOKEN"
+#     - kubectl config set-context default --cluster=stg-cluster --user=gitlab --namespace="$KUBE_NAMESPACE"
+#     - kubectl config use-context default
+#     - envsubst < k8s/arcx-configmap.yml | kubectl apply -f -
+#     - envsubst < k8s/arcx-volumes.yml | kubectl apply -f -
+#     - envsubst < k8s/arcx-db.yml | kubectl apply -f -
+#     - envsubst < k8s/arcx-public-api-app.yml | kubectl apply -f -
+#     - envsubst < k8s/arcx-public-api-web.yml | kubectl apply -f -
+#   environment:
+#     name: staging
+#     url: "https://$INGRESS_HOST"
+#   only:
+#     refs:
+#       - stage
+
+Export Development Data:
+  when: manual
+  stage: "Data Export"
+  image: dtzar/helm-kubectl
+  script:
+    - apk add gettext
+    - kubectl config set-cluster $KUBECTL_DEV_CLUSTER --server="$KUBE_URL"
+    - kubectl config set-cluster $KUBECTL_DEV_CLUSTER --certificate-authority=$KUBE_CA_PEM_FILE --embed-certs=true
+    - kubectl config set-credentials gitlab --token="$KUBE_TOKEN"
+    - kubectl config set-context default --cluster="$KUBECTL_DEV_CLUSTER" --user=gitlab --namespace="$KUBE_NAMESPACE"
+    - kubectl config use-context default
+    - envsubst < k8s/arcx-data-pipeline-export-job.yml | kubectl replace --force -f -
+  environment:
+    name: dev
+    url: https://arc-x-public-api.devsecops-dev.aws.epa.gov
+    kubernetes:
+      namespace: arc-x-public-api-238-dev
+  only:
+    - branches
+  except:
+    - master
+
+
+Import Staging Data:
+  when: manual
+  stage: "Data Import"
+  image: dtzar/helm-kubectl
+  script:
+    - apk add gettext
+    - kubectl config set-cluster dev-cluster --server="$KUBE_URL"
+    - kubectl config set-cluster dev-cluster --certificate-authority=$KUBE_CA_PEM_FILE --embed-certs=true
+    - kubectl config set-credentials gitlab --token="$KUBE_TOKEN"
+    - kubectl config set-context default --cluster=dev-cluster --user=gitlab --namespace="$KUBE_NAMESPACE"
+    - kubectl config use-context default
+    - envsubst < k8s/arcx-data-pipeline-import-job.yml | kubectl replace --force -f -
+  environment:
+    name: staging
+    url: "https://$INGRESS_HOST"
+  only:
+    - branches
+  except:
+    - master
+
+Prisma:
+  stage: Image Scan
+  tags:
+    - twistcli
+  when: manual
+  variables:
+    GIT_STRATEGY: clone
+    PRISMA_URL: https://prismacloud.gitlab-prod.aws.epa.gov
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/public-api-web:$CI_COMMIT_SHORT_SHA
+    - /public/server/apps/twistcli images scan --details --address $PRISMA_URL $CI_REGISTRY_IMAGE/public-api-web:$CI_COMMIT_SHORT_SHA
+
+    - docker pull $CI_REGISTRY_IMAGE/public-api-app:$CI_COMMIT_SHORT_SHA
+    - /public/server/apps/twistcli images scan --details --address $PRISMA_URL $CI_REGISTRY_IMAGE/public-api-app:$CI_COMMIT_SHORT_SHA
+
+    - docker pull $CI_REGISTRY_IMAGE/db:$CI_COMMIT_SHORT_SHA
+    - /public/server/apps/twistcli images scan --details --address $PRISMA_URL $CI_REGISTRY_IMAGE/db:$CI_COMMIT_SHORT_SHA
+
+    - docker pull $CI_REGISTRY_IMAGE/minio:$CI_COMMIT_SHORT_SHA
+    - /public/server/apps/twistcli images scan --details --address $PRISMA_URL $CI_REGISTRY_IMAGE/minio:$CI_COMMIT_SHORT_SHA
+
+    - docker pull $CI_REGISTRY_IMAGE/datapipeline:$CI_COMMIT_SHORT_SHA
+    - /public/server/apps/twistcli images scan --details --address $PRISMA_URL $CI_REGISTRY_IMAGE/datapipeline:$CI_COMMIT_SHORT_SHA
+
